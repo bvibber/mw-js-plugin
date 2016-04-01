@@ -7,7 +7,7 @@
    * @param width {int} CSS pixels width
    * @param height {int} CSS pixels height
    */
-  mediaWiki.JSPluginHost = function() {
+  mediaWiki.JSPluginHost = function(url, width, height) {
     // type coercions
     url = '' + url;
     width = +width;

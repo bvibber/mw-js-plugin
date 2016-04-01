@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title>Wiki test scaffolding</title>
+</head>
+<body>
+
+  <div id=placeholder></div>
+
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script>
+    // stub
+    mediaWiki = {
+      // stub
+    };
+  </script>
+  <script src="mw-js-plugin-host.js"></script>
+  <script>
+    var plugin = new mediaWiki.JSPluginHost( '../iframe-side/iframe.html', 400, 300 );
+    document.getElementById( 'placeholder' ).appendChild( plugin.iframe );
+    plugin.load();
+  </script>
+
+</body>
+</html>
