@@ -8,17 +8,38 @@
 
   <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="iframe-plugin-host.js"></script>
   <script>
-    // stub
-    mediaWiki = {
-      // stub
-    };
-  </script>
-  <script src="mw-js-plugin-host.js"></script>
-  <script>
-    var plugin = new mediaWiki.JSPluginHost( '../iframe-side/iframe.html', 400, 300 );
-    document.getElementById( 'placeholder' ).appendChild( plugin.iframe );
-    plugin.load();
+    var $plugin = $( '#placeholder' )
+      .iframePluginHost( '../iframe-side/iframe.html', 400, 300 )
+      .on( 'iframePluginLoaded', function( event ) {
+        // @todo implement this event & demo it
+        console.log( 'plugin loaded' );
+      } )
+      .on( 'iframePluginEvent', function( event ) {
+        // @todo implement this event & demo it
+        // One-shot event notification from the plugin.
+        console.log( 'plugin event', event.data );
+      } )
+      .on( 'iframePluginRequest', function( event ) {
+        // @todo implement this event & demo it
+        // Initiation of a request for data or action from the plugin
+        console.log( 'plugin request', event.data );
+
+        // Treat it like a $.Deferred
+        event.response.resolve( {
+          message: 'here have a response'
+        } );
+      } );
+
+    $( '#doSomething' ).on( 'click', function( event ) {
+      // @todo implement this ability & demo it
+      $plugin.iframePluginSend( {
+        action: 'doSomething'
+      } ).then( function( data ) {
+        console.log( 'plugin returned data for doSomething:', data );
+      } );
+    } );
   </script>
 
 </body>
