@@ -5,10 +5,13 @@ var initObj = {
     dependencies: dependenciesArr
 }
 window.addEventListener("message", function(e){
-    if (e.source = window){
-        console.log("iframe side", "source is own window");
-    }
+    console.log("iframe side", e.data, e);
 }, false);
 window.addEventListener("DOMContentLoaded", function(e){
         window.parent.postMessage("init", "*");
+        window.parent.postMessage(
+        {
+            title: 'Example Data Plugin',
+            url: location.href
+        }, "*");
 }, false);
