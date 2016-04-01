@@ -15,16 +15,14 @@ function wikidataGet(requestId, datagetCallback){
         (document.head||document.documentElement).appendChild(script);
         script.parentNode.removeChild(script); 
     }
-
     makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + requestId, function(response){
         console.log(response);
         var ids = Object.keys(response.entities[requestId].claims);
-
-        arrays = [], size = 50; //var
+        var arrays = [], size = 50;
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
         console.log(arrays);
-        finalEntityObj = {}; //var
+        var finalEntityObj = {};
         var counter = 0;
         for (i = 0; i < arrays.length; i++){
             makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
