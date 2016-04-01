@@ -1,5 +1,5 @@
-var requestId = 'Q801';
-function wikidataGet(id, callback){
+//Q801
+function wikidataGet(requestId, datagetCallback){
     function mergeObjects(obj1, obj2){
         var obj3 = {};
         for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
@@ -20,15 +20,20 @@ function wikidataGet(id, callback){
         console.log(response);
         var ids = Object.keys(response.entities[requestId].claims);
 
-        var arrays = [], size = 50;
+        arrays = [], size = 50; //var
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
         console.log(arrays);
-        finalEntityObj = {};
+        finalEntityObj = {}; //var
+        var counter = 0;
         for (i = 0; i < arrays.length; i++){
             makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
                 console.log(response);
-                finalEntityObj = mergeObjects(finalEntityObj, response);
+                finalEntityObj = mergeObjects(finalEntityObj, response.entities);
+                counter++;
+                if (counter == arrays.length){
+                    datagetCallback(finalEntityObj);
+                }
             })
         }
     });
