@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", function(e){
         window.parent.postMessage("init", "*");
         window.parent.postMessage(
         {
-            title: 'ExamplePlugin',
+            title: 'Example Data Plugin',
             url: location.href
         }, "*");
 }, false);
