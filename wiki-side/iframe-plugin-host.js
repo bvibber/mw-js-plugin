@@ -3,8 +3,8 @@
  * Implemented as jQuery plugin for convenient event handling.
  *
  * Events:
- * - 'iframePluginEvent': one-way event notification; details in event.data
- * - 'iframePluginRequest': plugin-initiated request; details in event.data,
+ * - 'iframePluginEvent:x': one-way event notification; details in event.data
+ * - 'iframePluginRequest:x': plugin-initiated request; details in event.data,
  *                          respond via Deferred object on event.response
  *
  * @param url {string} target iframe URL
@@ -21,7 +21,7 @@ $.fn.iframePluginHost = function(url, width, height) {
 
       if (typeof payload === 'object' && payload.format === 'iframePluginHost' ) {
         if ( payload.event ) {
-          this.trigger( 'iframePluginEvent' + payload.event, {
+          this.trigger( 'iframePluginEvent:' + payload.event, {
             data: payload.data
           } );
         }
@@ -31,7 +31,7 @@ $.fn.iframePluginHost = function(url, width, height) {
           // If the plugin sent us a request, pass that on down to our listeners.
           // The event.response object will be a jQuery.Deferred that the listener
           // can resolve, triggering the low-level response message.
-          this.trigger( 'iframePluginRequest' + payload.request, {
+          this.trigger( 'iframePluginRequest:' + payload.request, {
             requestId: payload.requestId,
             data: payload.data,
             response: r
