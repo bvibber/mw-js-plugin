@@ -1,5 +1,9 @@
+body{
+    margin: 0;
+}
 #mynetwork {
-    width: 720px;
+    width: 910px;
     height: 540px;
+    box-sizing: border-box;
     border: 2px solid lightgray;
 }
