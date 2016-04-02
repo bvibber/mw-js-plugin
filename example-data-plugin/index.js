@@ -27,7 +27,7 @@ function wikidataGet(requestId, datagetCallback){
         var size = 50;
         var ids = Object.keys(claims).filter(function(claimId) {
           return true;
-          return claims[claimId][0].rank === "preferred";
+          //return claims[claimId][0].rank === "preferred";
         })
         var subIds = [];
         Object.keys(claims).forEach(function(v, i, s){
@@ -36,7 +36,6 @@ function wikidataGet(requestId, datagetCallback){
                 subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
             }
         })
-
         ids = subIds;
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
@@ -49,8 +48,21 @@ function wikidataGet(requestId, datagetCallback){
             })
         }
     });
-
 };
+
+function wordwrap( str, width, brk, cut ) {
+ 
+    brk = brk || 'n';
+    width = width || 75;
+    cut = cut || false;
+ 
+    if (!str) { return str; }
+ 
+    var regex = '.{1,' +width+ '}(\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\S+?(\s|$)');
+ 
+    return str.match( RegExp(regex, 'g') ).join( brk );
+ 
+}
 
 var utils = {
   getFirstProp: function(obj) {
@@ -85,8 +97,8 @@ function graphCreator(mainEntity, claims, lang) {
   Object.keys(claims).filter(noLangSupport).forEach(function(claim) {
     vertices.push(
         {
-            value: claims[claim].labels[lang].value,
-            title: claims[claim].descriptions[lang].value,
+            value: wordwrap(claims[claim].labels[lang].value, 20, '<br/>n'),
+            title: wordwrap(claims[claim].descriptions[lang].value, 20, '<br/>n'),
             _id: claim
     });
   });
@@ -96,6 +108,7 @@ function graphCreator(mainEntity, claims, lang) {
 
   return { rawVertices: [].concat(mainVertex, rawNodes), rawEdges: rawEdges };
 }
+
 
 function visGraphBuilder(mainEntity, claims, lang) {
   var graph = graphCreator(mainEntity, claims, lang);
