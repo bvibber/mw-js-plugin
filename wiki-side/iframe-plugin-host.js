@@ -31,23 +31,24 @@ $.fn.iframePluginHost = function(url, width, height) {
           // If the plugin sent us a request, pass that on down to our listeners.
           // The event.response object will be a jQuery.Deferred that the listener
           // can resolve, triggering the low-level response message.
-          this.trigger( 'iframePluginRequest:' + payload.request, {
+          this.trigger( new jQuery.Event( 'iframePluginRequest:' + payload.request, {
             requestId: payload.requestId,
             data: payload.data,
             response: r
-          } );
+          } ) );
           r.promise().done( ( function( responseData ) {
             this.iframePluginSendPayload( {
-              responseId: payload.requestId
+              responseId: payload.requestId,
+              data: responseData
             } );
           } ).bind( this ) ).fail( ( function( responseError ) {
             console.log( 'error condition returned to response. not sure what to do', responseError );
           } ) );
         }
         if ( payload.responseId ) {
-          this.trigger( 'iframePluginReply' + payload.responseId, {
+          this.trigger( jQuery.Event( 'iframePluginReply' + payload.responseId, {
             data: payload.data
-          } );
+          } ) );
         }
       } else {
         console.log( 'Ignoring message from plugin in unexpected format', payload );
@@ -84,7 +85,7 @@ $.fn.iframePluginSendPayload = function( payload ) {
   if( iframe ) {
     // We don't force the target origin for now.
     // Safety first! ;)
-    iframe.postMessage( payload, '*' );
+    iframe.contentWindow.postMessage( payload, '*' );
     r.resolve();
   } else {
     // ignore
