@@ -18,7 +18,8 @@ function wikidataGet(requestId, datagetCallback){
     makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + requestId, function(response){
         console.log(response);
         var ids = Object.keys(response.entities[requestId].claims);
-        var finalEntityObj = response.entities;
+        var initialEntityObj = response.entities;
+        var finalEntityObj = {};
         var counter = 0;
         var arrays = [];
         var size = 50;
@@ -29,9 +30,8 @@ function wikidataGet(requestId, datagetCallback){
             makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
                 //console.log(response);
                 finalEntityObj = mergeObjects(finalEntityObj, response.entities);
-                counter++;
-                if (counter == arrays.length){
-                    datagetCallback(finalEntityObj);
+                if (++counter == arrays.length){
+                    datagetCallback(initialEntityObj, finalEntityObj);
                 }
             })
         }
