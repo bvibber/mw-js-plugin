@@ -31,10 +31,10 @@ function wikidataGet(requestId, datagetCallback){
         })
         var subIds = [];
         Object.keys(claims).forEach(function(v, i, s){
-            console.log(claims[v]);
-            var value = claims[v][0].mainsnak.datavalue.value;
-            if (claims[v][0].mainsnak.datatype == "wikibase-item")
+            if (claims[v][0].mainsnak.datavalue && claims[v][0].mainsnak.datatype == "wikibase-item"){
+                var value = claims[v][0].mainsnak.datavalue.value;
                 subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
+            }
         })
 
         ids = subIds;
