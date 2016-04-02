@@ -10,34 +10,47 @@
   <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script src="iframe-plugin-host.js"></script>
   <script>
-    var $plugin = $( '#placeholder' )
-      .iframePluginHost( '../example-data-plugin/index.html', 800, 600 )
-      .on( 'iframePluginEvent:loaded', function( event ) {
-        // @todo implement this event & demo it
-        // One-shot event notification from the plugin.
-        console.log( 'plugin loaded', event.data );
-      } )
-      .on( 'iframePluginRequest:info', function( event ) {
-        // @todo implement this event & demo it
-        // Initiation of a request for data or action from the plugin
-        console.log( 'plugin info request', event.data );
+    var fakeTitle = 'Q2766';
 
-        // Treat it like a $.Deferred
-        event.response.resolve( {
-          url: 'https://www.wikidata.org/wiki/Q2766',
-          title: 'Q2766',
-          lang: 'en'
+    function runDemo() {
+      var fakeUrl = 'https://www.wikidata.org/wiki/' + fakeTitle;
+      var $plugin = $( '<div>' )
+        .iframePluginHost( '../example-data-plugin/index.html', 800, 600 )
+        .on( 'iframePluginEvent:loaded', function( event ) {
+          // @todo implement this event & demo it
+          // One-shot event notification from the plugin.
+          console.log( 'plugin loaded', event.data );
+        } )
+        .on( 'iframePluginEvent:navigateTo', function( event ) {
+          console.log( 'navigate to ' + event.data );
+          fakeTitle = '' + event.data;
+          runDemo();
+        } )
+        .on( 'iframePluginRequest:info', function( event ) {
+          // @todo implement this event & demo it
+          // Initiation of a request for data or action from the plugin
+          console.log( 'plugin info request', event.data );
+
+          // Treat it like a $.Deferred
+          event.response.resolve( {
+            url: fakeUrl,
+            title: fakeTitle,
+            lang: 'en'
+          } );
+        } );
+
+      $( '#doSomething' ).on( 'click', function( event ) {
+        // @todo implement this ability & demo it
+        $plugin.iframePluginSendRequest( 'doSomething', {
+          someData: 'someValue'
+        } ).then( function( data ) {
+          console.log( 'plugin returned data for doSomething:', data );
         } );
       } );
 
-    $( '#doSomething' ).on( 'click', function( event ) {
-      // @todo implement this ability & demo it
-      $plugin.iframePluginSend( {
-        action: 'doSomething'
-      } ).then( function( data ) {
-        console.log( 'plugin returned data for doSomething:', data );
-      } );
-    } );
+      $( '#placeholder' ).empty().append( $plugin );
+    }
+    runDemo();
   </script>
 
 </body>
