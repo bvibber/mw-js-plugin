@@ -59,7 +59,7 @@ var utils = {
     return Object.keys(obj)[index];
   },
   claimToVertex: function(claim, index) {
-    return {id: index + 1, label: claim.value, title: claim.title}
+    return {id: index + 1, label: claim.value, title: claim.title, _id: claim._id}
   },
   claimToEdge: function(name, index) {
     return {from: 0, to: index + 1}
@@ -85,7 +85,8 @@ function graphCreator(mainEntity, claims, lang) {
     vertices.push(
         {
             value: claims[claim].labels[lang].value,
-            title: claims[claim].descriptions[lang].value
+            title: claims[claim].descriptions[lang].value,
+            _id: claim
     });
   });
 
@@ -111,8 +112,20 @@ function visGraphBuilder(mainEntity, claims, lang) {
   utils.createElementOnBody('mynetwork');
   var container = document.getElementById('mynetwork');
   var network = new vis.Network(container, data, options);
-}
+  network.on('click', function(e) {
+    if(e.nodes.length && e.nodes[0] !== 0) {
+      var wikiId = data.nodes._data[e.nodes[0]]._id;
 
+      window.parent.postMessage({
+        format: "iframePluginHost",
+        event: "navigateTo",
+        data: {
+          title: wikiId
+        }
+    }, "*")
+    }
+  })
+}
 
 //var entityId = "Q2766";
 window.parent.postMessage({
@@ -120,6 +133,7 @@ window.parent.postMessage({
     request: "info",
     requestId: 1
 }, "*")
+
 window.addEventListener("message", function(e){
     if (e.data.responseId == 1){
         var entityId = e.data.data.title;
@@ -129,4 +143,3 @@ window.addEventListener("message", function(e){
         })
     }
 })
-
