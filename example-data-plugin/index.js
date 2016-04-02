@@ -1,5 +1,5 @@
 //Q801
-function wikidataGet(requestId, lang, datagetCallback){
+function wikidataGet(requestId, datagetCallback){
     function mergeObjects(obj1, obj2){
         var obj3 = {};
         for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
@@ -43,7 +43,7 @@ function wikidataGet(requestId, lang, datagetCallback){
             makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
                 finalEntityObj = mergeObjects(finalEntityObj, response.entities);
                 if (++counter == arrays.length){
-                    datagetCallback(initialEntityObj, finalEntityObj, lang);
+                    datagetCallback(initialEntityObj, finalEntityObj);
                 }
             })
         }
@@ -124,8 +124,8 @@ window.addEventListener("message", function(e){
     if (e.data.responseId == 1){
         var entityId = e.data.data.title;
         var lang = e.data.data.lang;
-        wikidataGet(entityId, lang, function(mainVertex, claims, lang) {
-            visGraphBuilder(mainVertex, claims, lang)
+        wikidataGet(entityId, function(mainVertex, claims) {
+            visGraphBuilder(mainVertex, claims, lang);
         })
     }
 })
