@@ -148,7 +148,7 @@ function visGraphBuilder(mainEntity, claims, lang) {
   };
   var options = {
     nodes: {
-      shape: 'circle'
+      shape: 'ellipse'
     }
   };
   utils.createElementOnBody('mynetwork');
