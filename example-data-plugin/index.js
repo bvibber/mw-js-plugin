@@ -123,7 +123,7 @@ window.parent.postMessage({
 }, "*")
 window.addEventListener("message", function(e){
     if (e.data.requestId == 1){
-        var entityId = e.data.data.url.split('/wiki/')[1].split('?')[0];
+        var entityId = e.data.data.title;
         wikidataGet(entityId ,function(mainVertex, claims) {
             visGraphBuilder(mainVertex, claims)
         })
