@@ -48,7 +48,7 @@ function wikidataGet(requestId, datagetCallback){
             })
         }
     });
-    
+
 };
 
 var utils = {
@@ -73,15 +73,20 @@ var utils = {
 }
 
 function graphCreator(mainEntity, claims) {
+  var lang = 'en';
   var mainEntityProp = utils.getFirstProp(mainEntity);
-  var mainVertex = {id: 0, label: mainEntityProp.labels.en.value, title: mainEntityProp.descriptions.en.value, shape: 'database'};
+  var mainVertex = {id: 0, label: mainEntityProp.labels[lang].value, title: mainEntityProp.descriptions[lang].value, shape: 'database'};
   var vertices = [];
 
-  Object.keys(claims).forEach(function(claim) {
+  function noLangSupport(claim) {
+    return claims[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
+  }
+
+  Object.keys(claims).filter(noLangSupport).forEach(function(claim) {
     vertices.push(
         {
-            value: claims[claim].labels.en.value,
-            title: claims[claim].descriptions.en.value
+            value: claims[claim].labels[lang].value,
+            title: claims[claim].descriptions[lang].value
     });
   });
 
