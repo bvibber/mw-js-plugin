@@ -35,7 +35,7 @@ function wikidataGet(requestId, datagetCallback){
             if (claims[v][0].mainsnak.datatype == "wikibase-item")
                 subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
         })
-        console.log(subIds);
+
         ids = subIds;
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
@@ -117,6 +117,5 @@ function visGraphBuilder(mainEntity, claims) {
 
 var entityId = "Q2766";
 wikidataGet(entityId ,function(mainVertex, claims) {
-  console.log(mainVertex, claims);
   visGraphBuilder(mainVertex, claims)
 })
