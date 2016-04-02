@@ -122,7 +122,7 @@ window.parent.postMessage({
     requestId: 1
 }, "*")
 window.addEventListener("message", function(e){
-    if (e.data.requestId == 1){
+    if (e.data.responseId == 1){
         var entityId = e.data.data.title;
         wikidataGet(entityId ,function(mainVertex, claims) {
             visGraphBuilder(mainVertex, claims)
