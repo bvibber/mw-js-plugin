@@ -11,11 +11,7 @@
   <script src="iframe-plugin-host.js"></script>
   <script>
     var $plugin = $( '#placeholder' )
-      .iframePluginHost( '../iframe-side/iframe.html', 400, 300 )
-      .on( 'iframePluginLoaded', function( event ) {
-        // @todo implement this event & demo it
-        console.log( 'plugin loaded' );
-      } )
+      .iframePluginHost( '../example-data-plugin/index.html', 800, 600 )
       .on( 'iframePluginEvent', function( event ) {
         // @todo implement this event & demo it
         // One-shot event notification from the plugin.
