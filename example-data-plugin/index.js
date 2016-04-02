@@ -118,9 +118,9 @@ function visGraphBuilder(mainEntity, claims) {
 //var entityId = "Q2766";
 window.parent.postMessage({
     format: "iframePluginHost",
-    request: "url",
+    request: "info",
     requestId: 1
-})
+}, "*")
 window.addEventListener("message", function(e){
     if (e.data.requestId == 1){
         var entityId = e.data.data.url;
