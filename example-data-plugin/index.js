@@ -1,5 +1,5 @@
 //Q801
-function wikidataGet(requestId, datagetCallback){
+function wikidataGet(requestId, lang, datagetCallback){
     function mergeObjects(obj1, obj2){
         var obj3 = {};
         for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
@@ -43,7 +43,7 @@ function wikidataGet(requestId, datagetCallback){
             makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
                 finalEntityObj = mergeObjects(finalEntityObj, response.entities);
                 if (++counter == arrays.length){
-                    datagetCallback(initialEntityObj, finalEntityObj);
+                    datagetCallback(initialEntityObj, finalEntityObj, lang);
                 }
             })
         }
@@ -72,8 +72,7 @@ var utils = {
   }
 }
 
-function graphCreator(mainEntity, claims) {
-  var lang = 'en';
+function graphCreator(mainEntity, claims, lang) {
   var mainEntityProp = utils.getFirstProp(mainEntity);
   var mainVertex = {id: 0, label: mainEntityProp.labels[lang].value, title: mainEntityProp.descriptions[lang].value, shape: 'database'};
   var vertices = [];
@@ -96,8 +95,8 @@ function graphCreator(mainEntity, claims) {
   return { rawVertices: [].concat(mainVertex, rawNodes), rawEdges: rawEdges };
 }
 
-function visGraphBuilder(mainEntity, claims) {
-  var graph = graphCreator(mainEntity, claims);
+function visGraphBuilder(mainEntity, claims, lang) {
+  var graph = graphCreator(mainEntity, claims, lang);
   var nodes = new vis.DataSet(graph.rawVertices);
   var edges = new vis.DataSet(graph.rawEdges);
   var data = {
@@ -124,8 +123,9 @@ window.parent.postMessage({
 window.addEventListener("message", function(e){
     if (e.data.responseId == 1){
         var entityId = e.data.data.title;
-        wikidataGet(entityId ,function(mainVertex, claims) {
-            visGraphBuilder(mainVertex, claims)
+        var lang = e.data.data.lang;
+        wikidataGet(entityId, lang, function(mainVertex, claims, lang) {
+            visGraphBuilder(mainVertex, claims, lang)
         })
     }
 })
