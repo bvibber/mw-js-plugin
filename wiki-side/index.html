@@ -12,19 +12,20 @@
   <script>
     var $plugin = $( '#placeholder' )
       .iframePluginHost( '../example-data-plugin/index.html', 800, 600 )
-      .on( 'iframePluginEvent', function( event ) {
+      .on( 'iframePluginEvent:loaded', function( event ) {
         // @todo implement this event & demo it
         // One-shot event notification from the plugin.
-        console.log( 'plugin event', event.data );
+        console.log( 'plugin loaded', event.data );
       } )
-      .on( 'iframePluginRequest', function( event ) {
+      .on( 'iframePluginRequest:info', function( event ) {
         // @todo implement this event & demo it
         // Initiation of a request for data or action from the plugin
-        console.log( 'plugin request', event.data );
+        console.log( 'plugin info request', event.data );
 
         // Treat it like a $.Deferred
         event.response.resolve( {
-          message: 'here have a response'
+          url: 'https://www.wikidata.org/wiki/Q2766',
+          title: 'Q2766'
         } );
       } );
 
