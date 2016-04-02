@@ -115,7 +115,7 @@ var utils = {
 
 function graphCreator(mainEntity, claims, lang) {
   var mainEntityProp = utils.getFirstProp(mainEntity);
-  var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 10, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
+  var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
   var vertices = [];
 
   function noLangSupport(claim) {
@@ -125,7 +125,7 @@ function graphCreator(mainEntity, claims, lang) {
   Object.keys(claims).filter(noLangSupport).forEach(function(claim) {
     vertices.push(
         {
-            value: wordwrap(claims[claim].labels[lang].value, 10, '\n', false),
+            value: wordwrap(claims[claim].labels[lang].value, 16, '\n', false),
             title: wordwrap(claims[claim].descriptions[lang].value, 20, '<br/>', false),
             _id: claim
     });
