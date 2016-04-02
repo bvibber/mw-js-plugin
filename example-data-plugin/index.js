@@ -16,12 +16,18 @@ function wikidataGet(requestId, datagetCallback){
         script.parentNode.removeChild(script);
     }
     makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + requestId, function(response){
-        var ids = Object.keys(response.entities[requestId].claims);
+        var claims = response.entities[requestId].claims;
         var initialEntityObj = response.entities;
         var finalEntityObj = {};
         var counter = 0;
         var arrays = [];
         var size = 50;
+
+        var ids = Object.keys(claims).filter(function(claimId) {
+          return true;
+          return claims[claimId][0].rank === "preferred";
+        })
+
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
         for (i = 0; i < arrays.length; i++){
@@ -56,21 +62,22 @@ var utils = {
   }
 }
 
-function graphify(main, subVertices) {
-  var mainEntity = utils.getFirstProp(main);
-  var mainVertex = {id: 0, label: mainEntity.labels.en.value};
-  var claims = [];
-  Object.keys(subVertices).forEach(function(key) {
-    claims.push(key);
+function graphCreator(mainEntity, claims) {
+  var mainVertex = {id: 0, label: utils.getFirstProp(mainEntity).labels.en.value};
+  var vertices = [];
+
+  Object.keys(claims).forEach(function(claim) {
+    vertices.push(claims[claim].labels.en.value);
   });
-  var rawNodes = claims.map(utils.claimToVertex);
-  var rawEdges = claims.map(utils.claimToEdge);
+
+  var rawNodes = vertices.map(utils.claimToVertex);
+  var rawEdges = vertices.map(utils.claimToEdge);
 
   return { rawVertices: [].concat(mainVertex, rawNodes), rawEdges: rawEdges };
 }
 
-function createGraph(mainVertex, claims) {
-  var graph = graphify(mainVertex, claims);
+function visGraphBuilder(mainEntity, claims) {
+  var graph = graphCreator(mainEntity, claims);
   var nodes = new vis.DataSet(graph.rawVertices);
   var edges = new vis.DataSet(graph.rawEdges);
   var data = {
@@ -78,14 +85,12 @@ function createGraph(mainVertex, claims) {
      edges: edges
   };
   var options = {};
-
   utils.createElementOnBody('mynetwork');
   var container = document.getElementById('mynetwork');
-
   var network = new vis.Network(container, data, options);
 }
 
-wikidataGet("Q41",function(mainVertex, claims) {
+wikidataGet("P6",function(mainVertex, claims) {
   console.log(mainVertex, claims);
-  createGraph(mainVertex, claims)
+  visGraphBuilder(mainVertex, claims)
 })
