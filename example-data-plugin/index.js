@@ -48,8 +48,8 @@ var utils = {
   getKeyOnIndex: function(obj, index) {
     return Object.keys(obj)[index];
   },
-  claimToVertex: function(name, index) {
-    return {id: index + 1, label: name}
+  claimToVertex: function(claim, index) {
+    return {id: index + 1, label: claim.value, title: claim.title}
   },
   claimToEdge: function(name, index) {
     return {from: 0, to: index + 1}
@@ -63,11 +63,16 @@ var utils = {
 }
 
 function graphCreator(mainEntity, claims) {
-  var mainVertex = {id: 0, label: utils.getFirstProp(mainEntity).labels.en.value};
+  var mainEntityProp = utils.getFirstProp(mainEntity);
+  var mainVertex = {id: 0, label: mainEntityProp.labels.en.value, title: mainEntityProp.descriptions.en.value, shape: 'database'};
   var vertices = [];
 
   Object.keys(claims).forEach(function(claim) {
-    vertices.push(claims[claim].labels.en.value);
+    vertices.push(
+        {
+            value: claims[claim].labels.en.value,
+            title: claims[claim].descriptions.en.value
+    });
   });
 
   var rawNodes = vertices.map(utils.claimToVertex);
@@ -84,13 +89,17 @@ function visGraphBuilder(mainEntity, claims) {
      nodes: nodes,
      edges: edges
   };
-  var options = {};
+  var options = {
+      nodes: {
+          shape: 'box'
+      }
+  };
   utils.createElementOnBody('mynetwork');
   var container = document.getElementById('mynetwork');
   var network = new vis.Network(container, data, options);
 }
 
-wikidataGet("P6",function(mainVertex, claims) {
+wikidataGet("Q2766",function(mainVertex, claims) {
   console.log(mainVertex, claims);
   visGraphBuilder(mainVertex, claims)
 })
