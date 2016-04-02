@@ -31,6 +31,7 @@ function wikidataGet(requestId, datagetCallback){
         })
         var subIds = [];
         Object.keys(claims).forEach(function(v, i, s){
+            console.log(claims[v]);
             var value = claims[v][0].mainsnak.datavalue.value;
             if (claims[v][0].mainsnak.datatype == "wikibase-item")
                 subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
