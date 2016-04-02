@@ -100,16 +100,18 @@ function visGraphBuilder(mainEntity, claims) {
      edges: edges
   };
   var options = {
-      nodes: {
-          shape: 'box'
-      }
+    nodes: {
+      shape: 'box'
+    }
   };
   utils.createElementOnBody('mynetwork');
   var container = document.getElementById('mynetwork');
   var network = new vis.Network(container, data, options);
 }
 
-wikidataGet("Q2766",function(mainVertex, claims) {
+
+var entityId = "Q2766";
+wikidataGet(entityId ,function(mainVertex, claims) {
   console.log(mainVertex, claims);
   visGraphBuilder(mainVertex, claims)
 })
