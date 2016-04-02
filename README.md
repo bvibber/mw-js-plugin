@@ -5,6 +5,21 @@ Session notes from hackathon: https://etherpad.wikimedia.org/p/WikiHack16-JavaSc
 
 Session task in WMF phab: https://phabricator.wikimedia.org/T131436
 
+Demos
+=====
+
+Sample graph plugin is available for Wikidata, will be cleaned up later and others added!
+
+Standalone version: https://rawgit.com/brion/mw-js-plugin/master/wiki-side/index.html
+
+Login to Wikidata and go to [your user common.js page](https://www.wikidata.org/wiki/Special:MyPage/common.js). Click 'edit' tab and paste in:
+
+```
+importScriptURI('https://www.wikidata.org/w/index.php?title=User:Brion_VIBBER/plugin-test.js&action=raw&ctype=text/javascript');
+```
+
+
+
 Moving parts
 ============
 

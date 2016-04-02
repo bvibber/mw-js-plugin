@@ -21,9 +21,11 @@ $.fn.iframePluginHost = function(url, width, height) {
 
       if (typeof payload === 'object' && payload.format === 'iframePluginHost' ) {
         if ( payload.event ) {
-          this.trigger( 'iframePluginEvent:' + payload.event, {
-            data: payload.data
+          var e = new jQuery.Event( 'iframePluginEvent:' + payload.event, {
+            data: payload.data, // this gets nulled out by jQuery
+            details: payload.data
           } );
+          this.trigger( e );
         }
         if ( payload.request ) {
           var r = $.Deferred();

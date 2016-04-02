@@ -22,8 +22,9 @@
           console.log( 'plugin loaded', event.data );
         } )
         .on( 'iframePluginEvent:navigateTo', function( event ) {
-          console.log( 'navigate to ' + event.data );
-          fakeTitle = '' + event.data;
+            console.log('nav to', event);
+          console.log( 'navigate to ' + event.details.title );
+          //fakeTitle = '' + event.details.title;
           runDemo();
         } )
         .on( 'iframePluginRequest:info', function( event ) {
