@@ -28,7 +28,7 @@ There are two low-level types of messages: one-off "event" messages and two-way 
 
 The same message types are used in both directions; different events and data payloads will be specified on top of this to create an application-specific embedding protocol.
 
-One-way "send" messages have this layout:
+One-way "event" messages have this layout:
 
 ```
   {
