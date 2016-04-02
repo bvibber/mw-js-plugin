@@ -115,7 +115,7 @@ var utils = {
 
 function graphCreator(mainEntity, claims, lang) {
   var mainEntityProp = utils.getFirstProp(mainEntity);
-  var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '\n', false), shape: 'database'};
+  var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
   var vertices = [];
 
   function noLangSupport(claim) {
