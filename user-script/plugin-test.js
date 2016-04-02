@@ -1,5 +1,3 @@
-// lives at https://www.wikidata.org/wiki/User:Brion_VIBBER/plugin-test.js
-
 $.getScript('https://www.wikidata.org/w/index.php?title=User:Brion_VIBBER/iframe-plugin-host.js&action=raw&ctype=text/javascript')
 .done(function() {
 	// now wait until dom ready :D
@@ -12,7 +10,7 @@ $.getScript('https://www.wikidata.org/w/index.php?title=User:Brion_VIBBER/iframe
 	if ( action == 'view' && title.match(/^Q\d+$/) ) {
 	    var $plugin = $( '<div>' )
 	    	.attr( 'id', 'plugin-example-placeholder' )
-	      .iframePluginHost( 'https://rawgit.com/brion/mw-js-plugin/master/example-data-plugin/index.html', 720, 540 )
+	      .iframePluginHost( 'https://rawgit.com/brion/mw-js-plugin/master/example-data-plugin/index.html', 920, 540 )
 	      .on( 'iframePluginEvent:loaded', function( event ) {
 	        // @todo implement this event & demo it
 	        // One-shot event notification from the plugin.
@@ -34,7 +32,7 @@ $.getScript('https://www.wikidata.org/w/index.php?title=User:Brion_VIBBER/iframe
 	        	lang: lang
 	        } );
 	      } );
-	    $plugin.insertBefore( '#claims' );
+	    $plugin.insertBefore( '.wikibase-entityview-main' );
 		}
 	});
 });

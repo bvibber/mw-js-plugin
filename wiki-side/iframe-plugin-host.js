@@ -68,6 +68,8 @@ $.fn.iframePluginHost = function(url, width, height) {
   iframe.src = url;
   iframe.width = width;
   iframe.height = height;
+  iframe.frameBorder = 0;
+  iframe.style = 'border: none';
   this.append( iframe );
 
   return this;
