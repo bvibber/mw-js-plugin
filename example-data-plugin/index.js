@@ -16,18 +16,27 @@ function wikidataGet(requestId, datagetCallback){
         script.parentNode.removeChild(script);
     }
     makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + requestId, function(response){
+        var entityTypeObj = {
+            item: 'Q'
+        }
         var claims = response.entities[requestId].claims;
         var initialEntityObj = response.entities;
         var finalEntityObj = {};
         var counter = 0;
         var arrays = [];
         var size = 50;
-
         var ids = Object.keys(claims).filter(function(claimId) {
           return true;
           return claims[claimId][0].rank === "preferred";
         })
-
+        var subIds = [];
+        Object.keys(claims).forEach(function(v, i, s){
+            var value = claims[v][0].mainsnak.datavalue.value;
+            if (claims[v][0].mainsnak.datatype == "wikibase-item")
+                subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
+        })
+        console.log(subIds);
+        ids = subIds;
         while (ids.length > 0)
             arrays.push(ids.splice(0, size));
         for (i = 0; i < arrays.length; i++){
@@ -39,6 +48,7 @@ function wikidataGet(requestId, datagetCallback){
             })
         }
     });
+    
 };
 
 var utils = {
