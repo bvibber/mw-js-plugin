@@ -95,26 +95,28 @@ var utils = {
 }
 
 function graphCreator(mainEntity, claims, lang) {
-  function langSupport(claim, index, array) {
-    return array[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
-  }
-  var mainEntityProp = utils.getFirstProp(mainEntity.filter(langSupport));
-  var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
-  var vertices = [];
+    function langSupport(claim, index, array) {
+        return array[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
+    }
+    var mainEntityProp = utils.getFirstProp(
+        Object.keys(mainEntity).filter(langSupport)
+    );
+    var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
+    var vertices = [];
 
-  Object.keys(claims).filter(langSupport).forEach(function(claim) {
-    vertices.push(
-        {
-            value: wordwrap(claims[claim].labels[lang].value, 16, '\n', false),
-            title: wordwrap(claims[claim].descriptions[lang].value, 20, '<br/>', false),
-            _id: claim
+    Object.keys(claims).filter(langSupport).forEach(function(claim) {
+        vertices.push(
+            {
+                value: wordwrap(claims[claim].labels[lang].value, 16, '\n', false),
+                title: wordwrap(claims[claim].descriptions[lang].value, 20, '<br/>', false),
+                _id: claim
+        });
     });
-  });
 
-  var rawNodes = vertices.map(utils.claimToVertex);
-  var rawEdges = vertices.map(utils.claimToEdge);
+    var rawNodes = vertices.map(utils.claimToVertex);
+    var rawEdges = vertices.map(utils.claimToEdge);
 
-  return { rawVertices: [].concat(mainVertex, rawNodes), rawEdges: rawEdges };
+    return { rawVertices: [].concat(mainVertex, rawNodes), rawEdges: rawEdges };
 }
 
 
