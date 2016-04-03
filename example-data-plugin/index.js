@@ -1,3 +1,5 @@
+// demo
+
 //Q801
 function wikidataGet(requestId, datagetCallback){
     function mergeObjects(obj1, obj2){
