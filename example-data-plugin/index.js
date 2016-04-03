@@ -99,11 +99,12 @@ function graphCreator(mainEntity, claims, lang) {
   var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
   var vertices = [];
 
-  function noLangSupport(claim) {
+  function langSupport(claim) {
     return claims[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
   }
 
-  Object.keys(claims).filter(noLangSupport).forEach(function(claim) {
+  Object.keys(claims).filter(langSupport).forEach(function(claim) {
+    console.log(claim);
     vertices.push(
         {
             value: wordwrap(claims[claim].labels[lang].value, 16, '\n', false),
