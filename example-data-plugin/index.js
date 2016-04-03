@@ -95,8 +95,8 @@ var utils = {
 }
 
 function graphCreator(mainEntity, claims, lang) {
-  function langSupport(claim) {
-    return claims[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
+  function langSupport(claim, index, array) {
+    return array[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
   }
   var mainEntityProp = utils.getFirstProp(mainEntity.filter(langSupport));
   var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
