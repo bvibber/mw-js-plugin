@@ -15,7 +15,8 @@ function wikidataGet(requestId, datagetCallback){
         (document.head||document.documentElement).appendChild(script);
         script.parentNode.removeChild(script);
     }
-    makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + requestId, function(response){
+    var apiUri = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=";
+    makeRequest(apiUri + requestId, function(response){
         var entityTypeObj = {
             item: 'Q'
         }
@@ -23,61 +24,42 @@ function wikidataGet(requestId, datagetCallback){
         var initialEntityObj = response.entities;
         var finalEntityObj = {};
         var counter = 0;
-        var arrays = [];
+        var idArrays = [];
         var size = 50;
         var ids = Object.keys(claims).filter(function(claimId) {
           return true;
           //return claims[claimId][0].rank === "preferred";
         })
         var subIds = [];
-        Object.keys(claims).forEach(function(v, i, s){
-            if (claims[v][0].mainsnak.datavalue && claims[v][0].mainsnak.datatype == "wikibase-item"){
-                var value = claims[v][0].mainsnak.datavalue.value;
+        Object.keys(claims).forEach(function(claim, index, array){
+            if (claims[claim][0].mainsnak.datavalue && claims[claim][0].mainsnak.datatype == "wikibase-item"){
+                var value = claims[claim][0].mainsnak.datavalue.value;
                 subIds.push(entityTypeObj[value['entity-type']] + value['numeric-id']);
             }
         })
         ids = subIds;
         while (ids.length > 0)
-            arrays.push(ids.splice(0, size));
-        for (i = 0; i < arrays.length; i++){
-            makeRequest("https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + arrays[i].join('|'), function(response){
+            idArrays.push(ids.splice(0, size));
+        idArrays.forEach(function(requestIds, index, array){
+            makeRequest(apiUri + requestIds.join('|'), function(response){
                 finalEntityObj = mergeObjects(finalEntityObj, response.entities);
-                if (++counter == arrays.length){
+                if (++counter == array.length){
                     datagetCallback(initialEntityObj, finalEntityObj);
                 }
             })
-        }
+        })
     });
 };
 
 function wordwrap (str, int_width, str_break, cut) {
-  //  discuss at: http://phpjs.org/functions/wordwrap/
-  // original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-  // improved by: Nick Callen
-  // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-  // improved by: Sakimori
-  //  revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-  // bugfixed by: Michael Grier
-  // bugfixed by: Feras ALHAEK
-  //   example 1: wordwrap('Kevin van Zonneveld', 6, '|', true);
-  //   returns 1: 'Kevin |van |Zonnev|eld'
-  //   example 2: wordwrap('The quick brown fox jumped over the lazy dog.', 20, '<br />\n');
-  //   returns 2: 'The quick brown fox <br />\njumped over the lazy<br />\n dog.'
-  //   example 3: wordwrap('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
-  //   returns 3: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod \ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim \nveniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea \ncommodo consequat.'
-
   var m = ((arguments.length >= 2) ? arguments[1] : 75)
   var b = ((arguments.length >= 3) ? arguments[2] : '\n')
   var c = ((arguments.length >= 4) ? arguments[3] : false)
-
-  var i, j, l, s, r
-
+  var i, j, l, s, r;
   str += ''
-
   if (m < 1) {
     return str
   }
-
   for (i = -1, l = (r = str.split(/\r\n|\n|\r/))
     .length; ++i < l; r[i] += s) {
     for (s = r[i], r[i] = ''; s.length > m; r[i] += s.slice(0, j) + ((s = s.slice(j))
@@ -88,7 +70,6 @@ function wordwrap (str, int_width, str_break, cut) {
         .match(/^\S*/))[0].length
     }
   }
-
   return r.join('\n')
 }
 
