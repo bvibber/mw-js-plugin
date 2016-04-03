@@ -99,6 +99,7 @@ function graphCreator(mainEntity, claims, lang) {
         return claims[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
     }
     function mainLangSupport(claim) {
+        console.log(mainEntity, claim, mainEntity[claim]);
         return mainEntity[claim].labels.hasOwnProperty(lang) && mainEntity[claim].descriptions.hasOwnProperty(lang);
     }
     var filteredMainEntity = Object.keys(mainEntity).filter(mainLangSupport);
