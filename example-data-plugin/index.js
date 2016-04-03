@@ -98,9 +98,9 @@ function graphCreator(mainEntity, claims, lang) {
     function langSupport(claim, index, array) {
         return array[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
     }
-    var mainEntityProp = utils.getFirstProp(mainEntity);
-    var filteredMainEntityProp = Object.keys(mainEntityProp).filter(langSupport);
-    var mainVertex = {id: 0, label: wordwrap(filteredMainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(filteredMainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
+    var filteredMainEntity = Object.keys(mainEntity).filter(langSupport);
+    var mainEntityProp = utils.getFirstProp(filteredMainEntity);
+    var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
     var vertices = [];
 
     Object.keys(claims).filter(langSupport).forEach(function(claim) {
