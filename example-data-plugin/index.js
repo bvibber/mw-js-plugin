@@ -106,7 +106,7 @@ function graphCreator(mainEntity, claims, lang) {
     }
     var filteredMainEntity = Object.keys(mainEntity).filter(mainLangSupport);*/
     var mainEntityProp = utils.getFirstProp(mainEntity);
-    var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
+    var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database', shadow: true, font: {size: 20}};
     var vertices = [];
 
     Object.keys(claims).filter(langSupport).forEach(function(claim) {
@@ -135,8 +135,14 @@ function visGraphBuilder(mainEntity, claims, lang) {
   };
   var options = {
     nodes: {
-      shape: 'ellipse'
+      shape: 'ellipse',
+      shadow: true,
+      borderWidth: 2
+    },
+    edges: {
+        shadow: true
     }
+    
   };
   utils.createElementOnBody('mynetwork');
   var container = document.getElementById('mynetwork');
