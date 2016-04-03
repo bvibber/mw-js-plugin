@@ -161,6 +161,7 @@ window.addEventListener("message", function(e){
     if (e.data.responseId == 1){
         var entityId = e.data.data.title;
         var lang = e.data.data.lang;
+        console.log("language:", lang)
         wikidataGet(entityId, function(mainVertex, claims) {
             visGraphBuilder(mainVertex, claims, lang);
         })
