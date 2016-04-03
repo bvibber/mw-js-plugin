@@ -95,10 +95,13 @@ var utils = {
 }
 
 function graphCreator(mainEntity, claims, lang) {
-    function langSupport(claim, index, array) {
-        return array[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
+    function langSupport(claim) {
+        return claims[claim].labels.hasOwnProperty(lang) && claims[claim].descriptions.hasOwnProperty(lang);
     }
-    var filteredMainEntity = Object.keys(mainEntity).filter(langSupport);
+    function mainLangSupport(claim) {
+        return mainEntity[claim].labels.hasOwnProperty(lang) && mainEntity[claim].descriptions.hasOwnProperty(lang);
+    }
+    var filteredMainEntity = Object.keys(mainEntity).filter(mainLangSupport);
     var mainEntityProp = utils.getFirstProp(filteredMainEntity);
     var mainVertex = {id: 0, label: wordwrap(mainEntityProp.labels[lang].value, 20, '\n', false), title: wordwrap(mainEntityProp.descriptions[lang].value, 20, '<br/>', false), shape: 'database'};
     var vertices = [];
