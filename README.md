@@ -18,6 +18,7 @@ Login to Wikidata and go to [your user common.js page](https://www.wikidata.org/
 importScriptURI('https://www.wikidata.org/w/index.php?title=User:Brion_VIBBER/plugin-test.js&action=raw&ctype=text/javascript');
 ```
 
+Then visit any entity page, e.g. [https://www.wikidata.org/wiki/Q42](https://www.wikidata.org/wiki/Q42) , for a visualization of the entity and its property tree.
 
 
 Moving parts
